@@ -5,6 +5,8 @@ import { memberships, trainers } from '../data/mockData';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import { Card } from '../components/ui/Card';
+import toast from 'react-hot-toast';
+import { Member } from '../types';
 
 const AddMemberPage: React.FC = () => {
   const navigate = useNavigate();
@@ -32,8 +34,22 @@ const AddMemberPage: React.FC = () => {
       return;
     }
 
-    // Here you would normally make an API call to create the member
-    // For demo purposes, we'll just navigate back
+    // Create new member object
+    const newMember: Member = {
+      id: Math.random().toString(36).substr(2, 9),
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      membershipId: formData.membershipId,
+      trainerId: formData.trainerId || undefined,
+      joinDate: new Date().toISOString(),
+      status: 'active',
+      memberId: `MEM${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
+    };
+
+    // Add member to the list (in a real app, this would be an API call)
+    // For now, we'll use local state management
+    toast.success('Member added successfully');
     navigate('/members');
   };
 

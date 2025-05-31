@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { MemberProvider } from './context/MemberContext';
 import { Toaster } from 'react-hot-toast';
 
 // Layout Components
@@ -59,119 +60,121 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          {/* Dynamic Landing Page */}
-          <Route path="/" element={<LandingPage />} />
+      <MemberProvider>
+        <BrowserRouter>
+          <Routes>
+            {/* Dynamic Landing Page */}
+            <Route path="/" element={<LandingPage />} />
 
-          {/* Public Auth Routes */}
-          <Route path="/signin" element={<SignInPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
+            {/* Public Auth Routes */}
+            <Route path="/signin" element={<SignInPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<AdminDashboardPage />} />
-            <Route path="gym-owners" element={<GymOwnersPage />} />
-            <Route path="gym-owners/new" element={<AddGymOwnerPage />} />
-          </Route>
+            {/* Admin Routes */}
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboardPage />} />
+              <Route path="gym-owners" element={<GymOwnersPage />} />
+              <Route path="gym-owners/new" element={<AddGymOwnerPage />} />
+            </Route>
 
-          {/* Gym Owner Protected Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/members"
-            element={
-              <ProtectedRoute>
-                <MembersPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/members/new"
-            element={
-              <ProtectedRoute>
-                <AddMemberPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/members/:id"
-            element={
-              <ProtectedRoute>
-                <MemberDetailsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/trainers/new"
-            element={
-              <ProtectedRoute>
-                <AddTrainerPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/trainers/:id"
-            element={
-              <ProtectedRoute>
-                <TrainerDetailsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/memberships"
-            element={
-              <ProtectedRoute>
-                <MembershipsPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/memberships/new"
-            element={
-              <ProtectedRoute>
-                <CreatePlanPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/attendance"
-            element={
-              <ProtectedRoute>
-                <AttendancePage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/due-dates"
-            element={
-              <ProtectedRoute>
-                <DueDatesPage />
-              </ProtectedRoute>
-            }
-          />
+            {/* Gym Owner Protected Routes */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/members"
+              element={
+                <ProtectedRoute>
+                  <MembersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/members/new"
+              element={
+                <ProtectedRoute>
+                  <AddMemberPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/members/:id"
+              element={
+                <ProtectedRoute>
+                  <MemberDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainers/new"
+              element={
+                <ProtectedRoute>
+                  <AddTrainerPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trainers/:id"
+              element={
+                <ProtectedRoute>
+                  <TrainerDetailsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/memberships"
+              element={
+                <ProtectedRoute>
+                  <MembershipsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/memberships/new"
+              element={
+                <ProtectedRoute>
+                  <CreatePlanPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/attendance"
+              element={
+                <ProtectedRoute>
+                  <AttendancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/due-dates"
+              element={
+                <ProtectedRoute>
+                  <DueDatesPage />
+                </ProtectedRoute>
+              }
+            />
 
-          {/* Fallback route */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Fallback route */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
 
-      <Toaster
-        position="top-right"
-        toastOptions={{
-          style: {
-            background: '#fff',
-            color: '#333',
-          },
-          duration: 3000,
-        }}
-      />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            style: {
+              background: '#fff',
+              color: '#333',
+            },
+            duration: 3000,
+          }}
+        />
+      </MemberProvider>
     </AuthProvider>
   );
 }
