@@ -4,20 +4,36 @@ import { Link, useNavigate } from 'react-router-dom';
 import PageHeader from '../components/layout/PageHeader';
 import Button from '../components/ui/Button';
 import MembershipCard from '../components/membership/MembershipCard';
-import { memberships } from '../data/mockData';
+import { memberships as initialMemberships } from '../data/mockData';
 import { Membership } from '../types';
+import toast from 'react-hot-toast';
 
 const MembershipsPage: React.FC = () => {
   const navigate = useNavigate();
-  const [membershipsList, setMembershipsList] = useState(memberships);
+  const [membershipsList, setMembershipsList] = useState(initialMemberships);
 
   const handleEdit = (membership: Membership) => {
     navigate(`/memberships/${membership.id}/edit`);
   };
 
   const handleDelete = (membership: Membership) => {
-    // In a real app, this would call an API
     setMembershipsList(prev => prev.filter(m => m.id !== membership.id));
+  };
+
+  // Function to add new membership plan
+  const addMembership = (membership: Membership) => {
+    setMembershipsList(prev => [...prev, membership]);
+    toast.success('New membership plan added successfully');
+  };
+
+  // Function to update membership plan
+  const updateMembership = (updatedMembership: Membership) => {
+    setMembershipsList(prev => 
+      prev.map(membership => 
+        membership.id === updatedMembership.id ? updatedMembership : membership
+      )
+    );
+    toast.success('Membership plan updated successfully');
   };
 
   return (

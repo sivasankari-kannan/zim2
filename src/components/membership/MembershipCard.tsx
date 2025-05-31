@@ -3,6 +3,7 @@ import { Check, Edit, Trash2 } from 'lucide-react';
 import { Membership } from '../../types';
 import Button from '../ui/Button';
 import { cn } from '../../lib/utils';
+import toast from 'react-hot-toast';
 
 interface MembershipCardProps {
   membership: Membership;
@@ -17,6 +18,20 @@ const MembershipCard: React.FC<MembershipCardProps> = ({
   onEdit,
   onDelete
 }) => {
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(membership);
+      toast.success('Editing membership plan');
+    }
+  };
+
+  const handleDelete = () => {
+    if (onDelete && confirm('Are you sure you want to delete this membership plan?')) {
+      onDelete(membership);
+      toast.success('Membership plan deleted successfully');
+    }
+  };
+
   return (
     <div className={cn(
       "relative rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md p-6 animate-enter",
@@ -59,7 +74,7 @@ const MembershipCard: React.FC<MembershipCardProps> = ({
         <Button 
           variant={isPopular ? "primary" : "outline"} 
           className="flex-1"
-          onClick={() => onEdit && onEdit(membership)}
+          onClick={handleEdit}
           leftIcon={<Edit size={16} />}
         >
           Edit Plan
@@ -67,7 +82,7 @@ const MembershipCard: React.FC<MembershipCardProps> = ({
         <Button 
           variant="outline" 
           className="text-red-500 hover:bg-red-50"
-          onClick={() => onDelete && onDelete(membership)}
+          onClick={handleDelete}
         >
           <Trash2 size={16} />
         </Button>

@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Edit, Trash2, UserPlus, ExternalLink } from 'lucide-react';
+import { Search, Filter, Edit, Trash2, UserPlus, MessageCircle } from 'lucide-react';
 import { Member, Trainer } from '../../types';
-import { members, trainers, memberships } from '../../data/mockData';
+import { members as initialMembers, trainers as initialTrainers, memberships } from '../../data/mockData';
 import { formatDate } from '../../lib/utils';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
 import Badge from '../ui/Badge';
+import toast from 'react-hot-toast';
 
 const MemberList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string | null>(null);
-  const [membersList, setMembersList] = useState(members);
-  const [trainersList, setTrainersList] = useState(trainers);
+  const [membersList, setMembersList] = useState(initialMembers);
+  const [trainersList, setTrainersList] = useState(initialTrainers);
   
   const filteredMembers = membersList.filter((member) => {
     const matchesSearch =
@@ -59,19 +60,48 @@ const MemberList: React.FC = () => {
   const handleDeleteMember = (id: string) => {
     if (confirm('Are you sure you want to delete this member?')) {
       setMembersList(prev => prev.filter(member => member.id !== id));
+      toast.success('Member deleted successfully');
     }
   };
 
   const handleDeleteTrainer = (id: string) => {
     if (confirm('Are you sure you want to delete this trainer?')) {
       setTrainersList(prev => prev.filter(trainer => trainer.id !== id));
+      toast.success('Trainer deleted successfully');
     }
   };
 
-  const handleWhatsAppMessage = (phone: string, name: string) => {
-    const message = `Hi ${name}, this is a message from your gym.`;
-    const whatsappUrl = `https://wa.me/${phone.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+  const handleMessage = (phone: string, name: string) => {
+    // Instead of opening WhatsApp, show a toast notification
+    toast.success(`Message sent to ${name}`);
+  };
+
+  // Function to add new member (will be called from AddMemberPage)
+  const addMember = (member: Member) => {
+    setMembersList(prev => [...prev, member]);
+  };
+
+  // Function to add new trainer (will be called from AddTrainerPage)
+  const addTrainer = (trainer: Trainer) => {
+    setTrainersList(prev => [...prev, trainer]);
+  };
+
+  // Function to update member
+  const updateMember = (updatedMember: Member) => {
+    setMembersList(prev => 
+      prev.map(member => 
+        member.id === updatedMember.id ? updatedMember : member
+      )
+    );
+  };
+
+  // Function to update trainer
+  const updateTrainer = (updatedTrainer: Trainer) => {
+    setTrainersList(prev => 
+      prev.map(trainer => 
+        trainer.id === updatedTrainer.id ? updatedTrainer : trainer
+      )
+    );
   };
 
   return (
@@ -156,12 +186,14 @@ const MemberList: React.FC = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleWhatsAppMessage(member.phone, member.name)}
+                        onClick={() => handleMessage(member.phone, member.name)}
                       >
-                        <ExternalLink size={16} />
+                        <MessageCircle size={16} />
                       </Button>
                       <Link to={`/members/${member.id}`}>
-                        <Button variant="outline" size="sm">View</Button>
+                        <Button variant="outline" size="sm">
+                          <Edit size={16} />
+                        </Button>
                       </Link>
                       <Button 
                         variant="outline" 
@@ -249,12 +281,14 @@ const MemberList: React.FC = () => {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => handleWhatsAppMessage(trainer.phone, trainer.name)}
+                        onClick={() => handleMessage(trainer.phone, trainer.name)}
                       >
-                        <ExternalLink size={16} />
+                        <MessageCircle size={16} />
                       </Button>
                       <Link to={`/trainers/${trainer.id}`}>
-                        <Button variant="outline" size="sm">View</Button>
+                        <Button variant="outline" size="sm">
+                          <Edit size={16} />
+                        </Button>
                       </Link>
                       <Button 
                         variant="outline" 
