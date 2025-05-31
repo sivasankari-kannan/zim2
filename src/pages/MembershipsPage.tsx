@@ -43,7 +43,7 @@ const MembershipsPage: React.FC = () => {
         description="Manage your gym membership plans"
         action={
           <Link to="/memberships/new">
-            <Button variant="primary" leftIcon={<Plus size={16} />}>
+            <Button variant="primary\" leftIcon={<Plus size={16} />}>
               Create Plan
             </Button>
           </Link>
